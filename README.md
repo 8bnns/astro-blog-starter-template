@@ -1,64 +1,57 @@
-# Astro Starter Kit: Blog
+# Astro Blog Starter Template
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/astro-blog-starter-template)
+A blog starter built with Astro, Markdown/MDX, RSS, sitemap generation, and the Cloudflare adapter. Static assets are served through Cloudflare Workers.
 
-![Astro Template Preview](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
+## Requirements
 
-<!-- dash-content-start -->
+- Node.js 22 or later, matching `package.json` and `.nvmrc`.
+- npm, with the committed `package-lock.json` used for reproducible installs.
 
-Create a blog with Astro and deploy it on Cloudflare Workers as a [static website](https://developers.cloudflare.com/workers/static-assets/).
+If you use `nvm`, select the documented version with `nvm use`.
 
-Features:
-
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-- ✅ Built-in Observability logging
-
-<!-- dash-content-end -->
-
-## Getting Started
-
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
+## Local development
 
 ```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/astro-blog-starter-template
+npm ci
+npm run dev
 ```
 
-A live public deployment of this template is available at [https://astro-blog-starter-template.templates.workers.dev](https://astro-blog-starter-template.templates.workers.dev)
+Astro prints the local development URL, normally `http://localhost:4321`.
 
-## 🚀 Project Structure
+Content collections live in `src/content/`, routes live in `src/pages/`, reusable components live in `src/components/`, and static files live in `public/`.
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Validation
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```bash
+npm run check
+```
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+This command runs:
 
-Any static assets, like images, can be placed in the `public/` directory.
+1. `astro build` to create the production site.
+2. `tsc` to check TypeScript.
+3. `wrangler deploy --dry-run` to validate the Worker bundle without deploying it.
 
-## 🧞 Commands
+The check does not intentionally deploy the site. It does not replace browser, accessibility, or visual review of the rendered pages.
 
-All commands are run from the root of the project, from a terminal:
+## Before production
 
-| Command                           | Action                                           |
-| :-------------------------------- | :----------------------------------------------- |
-| `npm install`                     | Installs dependencies                            |
-| `npm run dev`                     | Starts local dev server at `localhost:4321`      |
-| `npm run build`                   | Build your production site to `./dist/`          |
-| `npm run preview`                 | Preview your build locally, before deploying     |
-| `npm run astro ...`               | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help`         | Get help using the Astro CLI                     |
-| `npm run build && npm run deploy` | Deploy your production site to Cloudflare        |
-| `npm wrangler tail`               | View real-time logs for all Workers              |
+- Replace the placeholder `site: "https://example.com"` in `astro.config.mjs` with the real public site URL so canonical URLs, RSS, and sitemap entries are correct.
+- Review the Worker configuration and provide any required Cloudflare credentials through the appropriate local or CI secret mechanism.
+- Review the generated site and deployment settings before publishing.
 
-## 👀 Want to learn more?
+## Commands
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the Astro development server. |
+| `npm run build` | Build the production site. |
+| `npm run preview` | Build and run locally through Wrangler. |
+| `npm run check` | Build, type-check, and perform a deployment dry run. |
+| `npm run cf-typegen` | Regenerate Cloudflare binding types. |
+| `npm run deploy` | Deploy to Cloudflare; run only after explicit review and authorization. |
+| `npx wrangler tail` | View logs for the configured deployed Worker. |
 
 ## Credit
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+This theme is based on [Bear Blog](https://github.com/HermanMartinus/bearblog/).
